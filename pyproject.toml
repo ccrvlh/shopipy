@@ -2,7 +2,7 @@
 authors = ["Lowercase <lowercase00@gmail.com>"]
 description = "An alternative wrapper to the Shopify API."
 name = "ShopiPy"
-version = "0.1.0"
+version = "0.3.0"
 
 [tool.poetry.dependencies]
 pydantic = "^1.8.2"
