@@ -7,10 +7,13 @@ HERE = pathlib.Path(__file__).parent
 # The text of the README file
 README = (HERE / "README.md").read_text()
 
+f = open("./VERSION", "r")
+version = f.read()
+
 # This call to setup() does all the work
 setup(
     name="pyshopify",
-    version="0.1.0",
+    version=version,
     description="An alternative wrapper for the Shopify API",
     long_description=README,
     long_description_content_type="text/markdown",
