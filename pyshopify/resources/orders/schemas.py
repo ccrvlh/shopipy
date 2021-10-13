@@ -4,16 +4,7 @@ from pydantic import BaseModel
 from pyshopify.resources.fulfillment.schemas import Fulfillments # type: ignore
 from pyshopify.resources.transactions.schemas import Transactions # type: ignore
 from pyshopify.resources.customers.schemas import Address, CustomerShopify # type: ignore
-
-
-class ShopMoney(BaseModel):
-    amount: Optional[str]
-    currency_code: Optional[str]
-
-
-class AmountSet(BaseModel):
-    shop_money: Optional[ShopMoney]
-    presentment_money: Optional[ShopMoney]
+from pyshopify.resources.common.schemas import ShopMoney, AmountSet
 
 
 class OrderAdjustments(BaseModel):

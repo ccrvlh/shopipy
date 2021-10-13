@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "pyshopify"
 description = "An alternative wrapper to the Shopify API."
-version = "0.1.0"
+name = "shopify-api"
 authors = ["Lowercase <lowercase00@gmail.com>"]
+version = "0.1.0"
 
 [tool.poetry.dependencies]
 pydantic = "^1.8.2"
