@@ -1,10 +1,10 @@
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
-from pyshopify.resources.fulfillment.schemas import Fulfillments # type: ignore
-from pyshopify.resources.transactions.schemas import Transactions # type: ignore
-from pyshopify.resources.customers.schemas import Address, CustomerShopify # type: ignore
-from pyshopify.resources.common.schemas import ShopMoney, AmountSet
+from shopipy.resources.fulfillment.schemas import Fulfillments # type: ignore
+from shopipy.resources.transactions.schemas import Transactions # type: ignore
+from shopipy.resources.customers.schemas import Address, CustomerShopify # type: ignore
+from shopipy.resources.common.schemas import ShopMoney, AmountSet
 
 
 class OrderAdjustments(BaseModel):

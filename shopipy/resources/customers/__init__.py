@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyshopify.base import BaseClient
+from shopipy.base import BaseClient
 
 class Customers(BaseClient):
     customer_path = "/customers"

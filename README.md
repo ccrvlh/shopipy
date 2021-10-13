@@ -1,9 +1,12 @@
 # Usage
 
+NOT PRODUCTION READY
+
+
 ### For public apps:
 ```python
 
-from pyshopify import PyShopify
+from shopipy import PyShopify
 
 my_token = "MY_APP_TOKEN"
 my_shop = "MY_SHOP_NAME"
@@ -19,7 +22,7 @@ products = client.Producyts.get_all(created_at_min="2021-05-01")
 ### For private apps:
 ```python
 
-from pyshopify import PyShopify
+from shopipy import PyShopify
 
 my_shop = "MY_SHOP_NAME"
 my_api_key = "MY_API_KEY"

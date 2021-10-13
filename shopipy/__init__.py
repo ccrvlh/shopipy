@@ -1,4 +1,4 @@
-from pyshopify.exceptions import *
+from shopipy.exceptions import *
 
 
 class PyShopify:
@@ -41,35 +41,35 @@ class PyShopify:
 
     @property
     def Orders(self):
-        from pyshopify.resources.orders import Orders # type: ignore
+        from shopipy.resources.orders import Orders # type: ignore
         return Orders(**self.auth)
 
     @property
     def Products(self):
-        from pyshopify.resources.products import Products # type: ignore
+        from shopipy.resources.products import Products # type: ignore
         return Products(**self.auth)
 
     @property
     def Customers(self):
-        from pyshopify.resources.customers import Customers # type: ignore
+        from shopipy.resources.customers import Customers # type: ignore
         return Customers(**self.auth)
 
     @property
     def Collections(self):
-        from pyshopify.resources.collections import Collections # type: ignore
+        from shopipy.resources.collections import Collections # type: ignore
         return Collections(**self.auth)
 
     @property
     def Inventory(self):
-        from pyshopify.resources.inventory import Inventory # type: ignore
+        from shopipy.resources.inventory import Inventory # type: ignore
         return Inventory(**self.auth)
 
     @property
     def Fulfillment(self):
-        from pyshopify.resources.fulfillment import Fulfillment # type: ignore
+        from shopipy.resources.fulfillment import Fulfillment # type: ignore
         return Fulfillment(**self.auth)
 
     @property
     def Shipping(self):
-        from pyshopify.resources.shipping import Shipping # type: ignore
+        from shopipy.resources.shipping import Shipping # type: ignore
         return Shipping(**self.auth)

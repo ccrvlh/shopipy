@@ -1,7 +1,7 @@
 [tool.poetry]
-description = "An alternative wrapper to the Shopify API."
-name = "shopify-api"
 authors = ["Lowercase <lowercase00@gmail.com>"]
+description = "An alternative wrapper to the Shopify API."
+name = "ShopiPy"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
