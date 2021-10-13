@@ -10,3 +10,6 @@ class Auth(BaseClient):
 
     def request_token(self):
         raise NotImplementedError
+
+    def validate_hmac(self):
+        raise NotImplementedError
