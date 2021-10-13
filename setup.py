@@ -17,7 +17,7 @@ setup(
     description="An alternative wrapper for the Shopify API",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/lowercase00/pyshop",
+    url="https://github.com/lowercase00/shopipy",
     author="Lowercase",
     license="MIT",
     classifiers=[
