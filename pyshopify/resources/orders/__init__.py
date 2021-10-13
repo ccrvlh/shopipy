@@ -1,6 +1,6 @@
 from datetime import datetime
 from pyshopify.base import BaseClient
-from pyshopify.models.order import ShopifyOrders
+from .schemas import ShopifyOrders
 
 class Orders(BaseClient):
     orders_path = "/orders"
@@ -68,10 +68,10 @@ class Orders(BaseClient):
             if serialize:
                 schemas = [ShopifyOrders(**single_order) for single_order in response['orders']]
                 all_orders.extend(schemas)
-                last_id = all_orders[len(all_orders) - 1].id
+                last_id = response['orders'][len(response['orders']) - 1].id # type: ignore
             
             else:
                 all_orders.extend(response['orders'])
-                last_id = all_orders[len(all_orders) - 1]['id']
+                last_id = response['orders'][len(response['orders']) - 1]['id']
             
         return all_orders

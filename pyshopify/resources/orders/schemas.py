@@ -1,9 +1,9 @@
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
-from pyshopify.models.fulfillment import Fulfillments
-from pyshopify.models.transaction import Transactions
-from pyshopify.models.customer import Address, CustomerShopify
+from pyshopify.resources.fulfillment.schemas import Fulfillments # type: ignore
+from pyshopify.resources.transactions.schemas import Transactions # type: ignore
+from pyshopify.resources.customers.schemas import Address, CustomerShopify # type: ignore
 
 
 class ShopMoney(BaseModel):
@@ -137,7 +137,7 @@ class Refunds(BaseModel):
 
 class ShopifyOrders(BaseModel):
 
-    id: Optional[str]
+    id: Optional[int]
     email: Optional[str]
     closed_at: Optional[str]
     created_at: Optional[datetime]

@@ -16,7 +16,6 @@ class InventoryItem(BaseModel):
     updated_at: Optional[datetime]
     harmonized_system_code: Optional[int]
     id: Optional[int]
-    harmonized_system_code: Optional[int]
     province_code_of_origin: Optional[str]
     sku: Optional[str]
     tracked: Optional[bool]

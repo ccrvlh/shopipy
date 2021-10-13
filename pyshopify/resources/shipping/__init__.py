@@ -8,15 +8,15 @@ class Collections(BaseClient):
         super(Collections, self).__init__(*args, **kwargs)
 
     def list_collections(self):
-        count_path = self.inv_items + ".json"
+        count_path = self.collection_path + ".json"
         return self._get(path=count_path)
 
     def get_collection(self, item_id: str = "any"):
-        item_path = self.inv_items + f"/{item_id}.json"
+        item_path = self.collection_path + f"/{item_id}.json"
         return self._get(path=item_path)
 
     def get_collection_orders(self):
-        item_level = self.inv_levels + f".json"
+        item_level = self.collection_path + f".json"
         return self._get(path=item_level)
 
     def count_collections(self):
@@ -33,9 +33,6 @@ class Collections(BaseClient):
         raise NotImplementedError("Set Collections Level Not Implemented.")
 
     def set_collection_address(self):
-        raise NotImplementedError("Set Collections Level Not Implemented.")
-
-    def set_collection_default_address(self):
         raise NotImplementedError("Set Collections Level Not Implemented.")
 
     def set_collection_default_address(self):

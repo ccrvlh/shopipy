@@ -1,6 +1,6 @@
 from typing import List
 from pyshopify.base import BaseClient
-from pyshopify.models.inventory import InventoryItem
+from .schemas import InventoryItem
 
 class Inventory(BaseClient):
     inv_items = "/inventory_items"
@@ -24,7 +24,7 @@ class Inventory(BaseClient):
 
     def update_item(self, item_id: str, item_payload: InventoryItem):
         item_path = self.inv_items + f"/{item_id}.json"
-        return self._put(path=item_path, payload=item_payload)
+        return self._put(path=item_path, payload=item_payload.dict())
 
     # Inventory Item Level
     def get_items_level(self):
@@ -38,7 +38,7 @@ class Inventory(BaseClient):
             location_id=location_id,
             disconnect_if_necessary=disconnect_if_necessary
         )
-        full_path = self.inv_level + "/set.json"
+        full_path = self.inv_levels + "/set.json"
         return self._post(path=full_path, payload=payload)
 
     def adjust_level(self, available_adjustment: int, inventory_item_id: int, location_id: int):
@@ -47,11 +47,11 @@ class Inventory(BaseClient):
             inventory_item_id=inventory_item_id,
             location_id=location_id
         )
-        full_path = self.inv_level + "/adjust.json"
+        full_path = self.inv_levels + "/adjust.json"
         return self._post(path=full_path, payload=payload)
 
     def delete_level(self, inventory_item_id: int, location_id: int):
-        full_path = self.inv_level + ".json"
+        full_path = self.inv_levels + ".json"
         return self._delete(path=full_path, inventory_item_id=inventory_item_id, location_id=location_id)
 
     def connect_item(self, location_id: int, inventory_item_id: int, relocate_if_necessary: bool = False):
@@ -60,7 +60,7 @@ class Inventory(BaseClient):
             inventory_item_id=inventory_item_id,
             relocate_if_necessary=relocate_if_necessary
         )
-        full_path = self.inv_level + "/connect.json"
+        full_path = self.inv_levels + "/connect.json"
         return self._post(path=full_path, payload=payload)
 
     # Inventory Locations

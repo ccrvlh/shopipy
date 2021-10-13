@@ -1,5 +1,5 @@
 from typing import Any, Dict
-import requests
+import requests # type: ignore
 from pyshopify.exceptions import *
 
 class BaseClient:

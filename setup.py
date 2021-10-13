@@ -1,5 +1,5 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup # type: ignore
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -10,13 +10,12 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="pyshopify",
-    version="1.0.0",
-    description="Read the latest Real Python tutorials",
+    version="0.1.0",
+    description="An alternative wrapper for the Shopify API",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/pyshopify/pyshopify",
-    author="Real Python",
-    author_email="info@realpython.com",
+    url="https://github.com/lowercase00/pyshopify",
+    author="Lowercase",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
@@ -30,5 +29,5 @@ setup(
         "console_scripts": [
             "realpython=reader.__main__:main",
         ]
-    },
+    }
 )

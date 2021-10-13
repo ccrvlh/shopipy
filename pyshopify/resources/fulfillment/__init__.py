@@ -8,15 +8,15 @@ class Fulfillment(BaseClient):
         super(Fulfillment, self).__init__(*args, **kwargs)
 
     def list_fulfillments(self):
-        count_path = self.inv_items + ".json"
+        count_path = self.fulfillment_path + ".json"
         return self._get(path=count_path)
 
     def get_fulfillment(self, item_id: str = "any"):
-        item_path = self.inv_items + f"/{item_id}.json"
+        item_path = self.fulfillment_path + f"/{item_id}.json"
         return self._get(path=item_path)
 
     def get_fulfillment_orders(self):
-        item_level = self.inv_levels + f".json"
+        item_level = self.fulfillment_path + f".json"
         return self._get(path=item_level)
 
     def count_fulfillments(self):
@@ -33,9 +33,6 @@ class Fulfillment(BaseClient):
         raise NotImplementedError("Set Fulfillment Level Not Implemented.")
 
     def set_fulfillment_address(self):
-        raise NotImplementedError("Set Fulfillment Level Not Implemented.")
-
-    def set_fulfillment_default_address(self):
         raise NotImplementedError("Set Fulfillment Level Not Implemented.")
 
     def set_fulfillment_default_address(self):
