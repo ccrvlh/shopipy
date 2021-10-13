@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyshop.base import BaseClient
+from shopipy.base import BaseClient
 from .schemas import ShopifyOrders
 
 class Orders(BaseClient):

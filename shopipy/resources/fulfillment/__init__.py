@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyshop.base import BaseClient
+from shopipy.base import BaseClient
 
 class Fulfillment(BaseClient):
     fulfillment_path = "/fulfillment"

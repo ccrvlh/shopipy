@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyshop.base import BaseClient
+from shopipy.base import BaseClient
 
 class Collections(BaseClient):
     collection_path = "/collection"

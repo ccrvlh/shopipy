@@ -1,6 +1,6 @@
 from typing import Any, Dict
 import requests # type: ignore
-from pyshop.exceptions import *
+from shopipy.exceptions import *
 
 class BaseClient:
 
