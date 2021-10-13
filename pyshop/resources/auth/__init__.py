@@ -1,5 +1,5 @@
 from datetime import datetime
-from pyshopify.base import BaseClient
+from pyshop.base import BaseClient
 
 class Auth(BaseClient):
     def __init__(self, *args, **kwargs):

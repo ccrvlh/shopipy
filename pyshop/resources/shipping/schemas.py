@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
-from pyshopify.resources.common.schemas import AmountSet, TaxItem
+from pyshop.resources.common.schemas import AmountSet, TaxItem
 
 class Shipping(BaseModel):
     code: Optional[str]

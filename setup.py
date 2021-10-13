@@ -12,12 +12,12 @@ version = f.read()
 
 # This call to setup() does all the work
 setup(
-    name="pyshopify",
+    name="pyshop",
     version=version,
     description="An alternative wrapper for the Shopify API",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/lowercase00/pyshopify",
+    url="https://github.com/lowercase00/pyshop",
     author="Lowercase",
     license="MIT",
     classifiers=[

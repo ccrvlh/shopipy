@@ -1,5 +1,5 @@
 from typing import List
-from pyshopify.base import BaseClient
+from pyshop.base import BaseClient
 from .schemas import InventoryItem
 
 class Inventory(BaseClient):

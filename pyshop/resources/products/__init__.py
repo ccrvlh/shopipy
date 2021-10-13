@@ -1,6 +1,6 @@
 from datetime import datetime
-from pyshopify.base import BaseClient
-from pyshopify.resources.products.schemas import Product # type: ignore
+from pyshop.base import BaseClient
+from pyshop.resources.products.schemas import Product # type: ignore
 
 class Products(BaseClient):
     product_path = "/products"
