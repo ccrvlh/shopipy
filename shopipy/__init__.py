@@ -1,7 +1,7 @@
 from shopipy.exceptions import *
 
 
-class PyShopify:
+class ShopiPy:
     """
     SDK Class to interact with the Shopify API.
     Usage:
@@ -31,7 +31,7 @@ class PyShopify:
         Returns:
             [type]: [description]
         """
-        self.auth = dict(
+        self.config = dict(
             shop_domain=shop_domain,
             token=token,
             api_key=api_key,
@@ -40,36 +40,41 @@ class PyShopify:
         )
 
     @property
+    def OAuth(self, app_key: str, app_secret: str):
+        from shopipy.resources.oauth import OAuth # type: ignore
+        return OAuth(app_key=app_key, app_secret=app_secret, **self.config)
+
+    @property
     def Orders(self):
         from shopipy.resources.orders import Orders # type: ignore
-        return Orders(**self.auth)
+        return Orders(**self.config)
 
     @property
     def Products(self):
         from shopipy.resources.products import Products # type: ignore
-        return Products(**self.auth)
+        return Products(**self.config)
 
     @property
     def Customers(self):
         from shopipy.resources.customers import Customers # type: ignore
-        return Customers(**self.auth)
+        return Customers(**self.config)
 
     @property
     def Collections(self):
         from shopipy.resources.collections import Collections # type: ignore
-        return Collections(**self.auth)
+        return Collections(**self.config)
 
     @property
     def Inventory(self):
         from shopipy.resources.inventory import Inventory # type: ignore
-        return Inventory(**self.auth)
+        return Inventory(**self.config)
 
     @property
     def Fulfillment(self):
         from shopipy.resources.fulfillment import Fulfillment # type: ignore
-        return Fulfillment(**self.auth)
+        return Fulfillment(**self.config)
 
     @property
     def Shipping(self):
         from shopipy.resources.shipping import Shipping # type: ignore
-        return Shipping(**self.auth)
+        return Shipping(**self.config)
