@@ -82,7 +82,7 @@ class Webhooks(BaseClient):
             private_metafield_namespaces=private_metafield_namespaces
         )
         full_path = f"/{self.webhooks_path}.json"
-        return self._post(path=full_path, params=dict(**params))
+        return self._post(path=full_path, payload=params)
 
     def set_webhooks(
         self,
@@ -102,7 +102,7 @@ class Webhooks(BaseClient):
                 private_metafield_namespaces=private_metafield_namespaces
             )
             full_path = f"/{self.webhooks_path}.json"
-            self._post(path=full_path, params=dict(**params))
+            self._post(path=full_path, payload=params)
         return
 
     def update_webhook(self):

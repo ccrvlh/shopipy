@@ -37,30 +37,28 @@ class OAuth(BaseClient):
         )
         
         response = requests.get(url, params=query_params)
-        if response.code == 200:
-            json_payload = json.loads(response.read().decode("utf-8"))
+        if response.status_code == 200:
+            json_payload = response.json()
             self.token = json_payload["access_token"]
             self.scopes = json_payload["scope"]
             return self.token
         else:
-            raise Exception(response.msg)
+            raise Exception(response.text)
 
-    @classmethod
-    def validate_params(cls, params: Dict[Any, Any]):
+    def validate_params(self, params: Dict[Any, Any]):
         """ Avoid replay attacks by making sure the request isn't more than a day old. """
         one_day = 24 * 60 * 60
         if int(params.get("timestamp", 0)) < time.time() - one_day:
             return False
 
-        return cls.validate_hmac(params)
+        return self.validate_hmac(params)
 
-    @classmethod
-    def validate_hmac(cls, params: Dict[Any, Any]):
+    def validate_hmac(self, params: Dict[Any, Any]):
         """ Validates that the request is from Shopify through HMAC validation """
         if "hmac" not in params:
             return False
 
-        hmac_calculated = cls.calculate_hmac(params).encode("utf-8")
+        hmac_calculated = self.calculate_hmac(params).encode("utf-8")
         hmac_to_verify = params["hmac"].encode("utf-8")
 
         # Try to use compare_digest() to reduce vulnerability to timing attacks.
@@ -70,17 +68,15 @@ class OAuth(BaseClient):
         except AttributeError:
             return hmac_calculated == hmac_to_verify
 
-    @classmethod
-    def calculate_hmac(cls, params: Dict[Any, Any]):
+    def calculate_hmac(self, params: Dict[Any, Any]):
         """
         Calculate the HMAC of the given parameters in line with Shopify's rules for OAuth authentication.
         See http://docs.shopify.com/api/authentication/oauth#verification.
         """
-        encoded_params = cls.__encoded_params_for_signature(params)
-        return hmac.new(cls.secret.encode(), encoded_params.encode(), sha256).hexdigest()
+        encoded_params = self.__encoded_params_for_signature(params)
+        return hmac.new(self.api_secret.encode(), encoded_params.encode(), sha256).hexdigest()
 
-    @classmethod
-    def __encoded_params_for_signature(cls, params: Dict[Any, Any]):
+    def __encoded_params_for_signature(self, params: Dict[Any, Any]):
         """
         Sort and combine query parameters into a single string, excluding those that should be removed and joining with '&'
         """
