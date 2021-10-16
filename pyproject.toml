@@ -13,6 +13,7 @@ requests = "^2.26.0"
 mypy = "^0.910"
 jupyter = "^1.0.0"
 types-six = "^1.16.2"
+types-requests = "^2.25.11"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

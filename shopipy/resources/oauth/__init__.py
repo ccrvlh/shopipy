@@ -1,61 +1,53 @@
 from shopipy.base import BaseClient
+import requests
 from typing import Any, Dict, List
-import hmac, urllib, json, sha256, re, six, time # type: ignore
+import hmac, urllib, json, six, time
+from hashlib import sha256
 
 class OAuth(BaseClient):
 
-    protocol: str = "https"
-    myshopify: str = "myshopify.com"
-    port: str = ""
+    def __init__(self, shop_domain: str = None, version: str = "2021-04", api_key: str = None, api_secret: str = None, app_key: str = None, app_password: str = None, app_shared_secret: str = None, access_token: str = None, timeout: int = 5):
+        super().__init__(shop_domain=shop_domain, version=version, api_key=api_key, api_secret=api_secret, app_key=app_key, app_password=app_password, app_shared_secret=app_shared_secret, access_token=access_token, timeout=timeout)
 
-    def __init__(self, shop_url: str, version: str = "", token: str = "", access_scopes: List[str] = [], *args, **kwargs):
-        self.url = self.__prepare_url(shop_url)
-        self.token = token
-        self.version = version
-        self.access_scopes = access_scopes
-        super(OAuth, self).__init__(*args, **kwargs)
-
-    def create_permission_url(self, scope: List[str], redirect_uri: str, state: str = None):
+    def create_permission_url(self, shop_domain: str, scopes: List[str], redirect_uri: str, state: str = None):
+        """ Creates the URL that will be used for the OAuth flow """
         query_params = dict(
             client_id=self.api_key,
-            scope=",".join(scope),
-            redirect_uri=redirect_uri
+            scope=",".join(scopes),
+            redirect_uri=redirect_uri,
+            state=state
         )
-        if state:
-            query_params["state"] = state
-        return f"https://{self.url}/admin/oauth/authorize?{urllib.parse.urlencode(query_params)}"
+        clened_params = self._clean_params(query_params)
+        return f"https://{shop_domain}.myshopify.com/admin/oauth/authorize?{urllib.parse.urlencode(clened_params)}"
 
-    def request_token(self, params: Dict[Any, Any]):
-        if self.token:
-            return self.token
+    def request_token(self, request_params: Dict[Any, Any]):
+        """ Parses the callback from Shopify to get the token after the OAuth Flow is complete """
+        if self.access_token:
+            return self.access_token
         
-        if not self.validate_params(params):
+        if not self.validate_params(request_params):
             raise Exception("Invalid HMAC: Possibly malicious login")
-        
-        code = params["code"]
-        url = f"https://{self.url}/admin/oauth/access_token?"
+
+        url = f"https://{self.shop_domain}.myshopify.com/admin/oauth/access_token?"
         
         query_params = dict(
             client_id=self.api_key,
-            client_secret=self.secret,
-            code=code
+            client_secret=self.api_secret,
+            code=request_params["code"]
         )
         
-        request = urllib.request.Request(url, urllib.parse.urlencode(query_params).encode("utf-8"))
-        response = urllib.request.urlopen(request)
-
+        response = requests.get(url, params=query_params)
         if response.code == 200:
             json_payload = json.loads(response.read().decode("utf-8"))
             self.token = json_payload["access_token"]
-            self.access_scopes = json_payload["scope"]
+            self.scopes = json_payload["scope"]
             return self.token
         else:
             raise Exception(response.msg)
 
     @classmethod
     def validate_params(cls, params: Dict[Any, Any]):
-        # Avoid replay attacks by making sure the request
-        # isn't more than a day old.
+        """ Avoid replay attacks by making sure the request isn't more than a day old. """
         one_day = 24 * 60 * 60
         if int(params.get("timestamp", 0)) < time.time() - one_day:
             return False
@@ -64,6 +56,7 @@ class OAuth(BaseClient):
 
     @classmethod
     def validate_hmac(cls, params: Dict[Any, Any]):
+        """ Validates that the request is from Shopify through HMAC validation """
         if "hmac" not in params:
             return False
 
@@ -85,24 +78,6 @@ class OAuth(BaseClient):
         """
         encoded_params = cls.__encoded_params_for_signature(params)
         return hmac.new(cls.secret.encode(), encoded_params.encode(), sha256).hexdigest()
-
-    @classmethod
-    def __prepare_url(cls, url: str):
-        if not url or (url.strip() == ""):
-            return None
-        url = re.sub("^https?://", "", url)
-        shop = urllib.parse.urlparse("https://" + url).hostname
-        if shop is None:
-            return None
-        idx = shop.find(".")
-        if idx != -1:
-            shop = shop[0:idx]
-        if len(shop) == 0:
-            return None
-        shop += "." + cls.myshopify_domain
-        if cls.port:
-            shop += ":" + str(cls.port)
-        return shop
 
     @classmethod
     def __encoded_params_for_signature(cls, params: Dict[Any, Any]):

@@ -6,11 +6,15 @@ class BaseClient:
 
     def __init__(
         self,
-        shop_domain: str,
+        shop_domain: str = None,
         version: str = "2021-04",
-        token: str = None,
         api_key: str = None,
-        api_password: str = None
+        api_secret: str = None,
+        app_key: str = None,
+        app_password: str = None,
+        app_shared_secret: str = None,
+        access_token: str = None,
+        timeout: int = 5
     ):
         """
         Base class to interact with Shopify API.
@@ -18,58 +22,60 @@ class BaseClient:
         Args:
             shop_domain (str): The shopDomain (without 'myshopify')
             version (str): API Version, defaults to "2021-04"
-            token (str, optional): Token, used for public apps.
+            access_token (str, optional): access_token, used for public apps.
             api_key (str, optional): API Key, for private apps.
             api_password (str, optional): API Password for private apps.
         """
         super(BaseClient, self).__init__()
         self.shop_domain = shop_domain
-        self.token = token
-        self.api_key = api_key
-        self.api_password = api_password
         self.version = version
-
+        self.api_key = api_key
+        self.api_secret = api_secret
+        self.app_key = app_key
+        self.app_password = app_password
+        self.app_shared_secret = app_shared_secret
+        self.access_token = access_token
+        self.timeout = timeout
+        
+        # Calculated fields
         self.base_url = f"https://{shop_domain}.myshopify.com/admin/api/{version}"
         self.header = dict() # type: ignore
-        self.private = True
+        self.private = False
         self.setup()
-
-
-            # time.sleep(1)
-            # r = requests.get(str(url), timeout=10)
-            # retry_after = r.headers.get('Retry-After', 0)
-            # retry_after = int(retry_after)
-            # time.sleep(retry_after)
-
-            # json_object = r.json()
-            # customers = json_object['customers']
-
-            # if len(customers) == 0:
-            #     break
-
-
 
     def setup(self):
         """
-        Main setup function, used to set the API version,
-        token (after a database query) and header for the requests.
+        Main setup function, used to set the API version.
+        If the application is private, uses the app_password as the access_token.
         """
-        if self.token:
-            if self.api_key:
-                raise CredentialsError("Can't use API Key when defining the token.")
-            
-            self.private = False
-            self.header = {
-                "Content-Type": "application/json",
-                "X-Shopify-Access-Token": self.token
-            }
+        if self.app_password:
+            self.private = True
+            self.access_token = self.app_password
 
-        elif self.api_key:
-            if not self.api_password:
-                raise CredentialsError("No password set for private app.")
-            self.header = {"Content-Type": "application/json"}
+        # Has to have one or the other (public or private app)        
+        if not (self.app_key or self.api_key):
+            raise CredentialsError("Can't use API Key when defining the token.")
+            
+        # App is private but no password was set
+        if self.app_key and not self.app_password:
+            raise CredentialsError("No password set for private app.")
+
+        # Sets the header for authorized requests
+        self.header = {
+            "Content-Type": "application/json",
+            "X-Shopify-Access-Token": self.access_token
+        }
+
 
     def _clean_params(self, data: dict):
+        """Receives a dictionary of data, and excludes unset.
+
+        Args:
+            data (dict): The data dictionary
+
+        Returns:
+            data (dict): The cleaned up dictionary
+        """
         return dict(filter(lambda item: item[1] is not None, data.items()))
 
     def _get(self, path: str, **params):
@@ -83,12 +89,8 @@ class BaseClient:
             Response: Request's JSON Response object.
         """
         full_path = self.base_url + path
-        if self.private:
-            r = requests.get(url=full_path, headers=self.header, timeout=5, params=dict(**params), auth=(self.api_key, self.api_password))
-            response = r.json()
-        else:
-            r = requests.get(url=full_path, headers=self.header, timeout=5, params=dict(**params))
-            response = r.json()
+        r = requests.get(url=full_path, headers=self.header, timeout=self.timeout, params=dict(**params))
+        response = r.json()
         return response
 
     def _post(self, path: str, payload: Dict[Any, Any]):
@@ -103,12 +105,8 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        if self.private:
-            r = requests.post(url=full_path, headers=self.header, data=payload, timeout=5, auth=(self.api_key, self.api_password))
-            response = r.json()
-        else:
-            r = requests.post(url=full_path, headers=self.header, data=payload, timeout=5)
-            response = r.json()
+        r = requests.post(url=full_path, headers=self.header, data=payload, timeout=self.timeout)
+        response = r.json()
         return response
 
     def _put(self, path: str, payload: Dict[Any, Any]):
@@ -123,12 +121,8 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        if self.private:
-            r = requests.put(url=full_path, headers=self.header, data=payload, timeout=5, auth=(self.api_key, self.api_password))
-            response = r.json()
-        else:
-            r = requests.put(url=full_path, headers=self.header, data=payload, timeout=5)
-            response = r.json()
+        r = requests.put(url=full_path, headers=self.header, data=payload, timeout=self.timeout)
+        response = r.json()
         return response
 
     def _delete(self, path: str, **params):
@@ -143,10 +137,21 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        if self.private:
-            r = requests.delete(url=full_path, headers=self.header, timeout=5, params=dict(**params), auth=(self.api_key, self.api_password))
-            response = r.json()
-        else:
-            r = requests.delete(url=full_path, headers=self.header, timeout=5, params=dict(**params))
-            response = r.json()
+        r = requests.delete(url=full_path, headers=self.header, timeout=self.timeout, params=dict(**params))
+        response = r.json()
         return response
+
+
+
+
+# time.sleep(1)
+# r = requests.get(str(url), timeout=10)
+# retry_after = r.headers.get('Retry-After', 0)
+# retry_after = int(retry_after)
+# time.sleep(retry_after)
+
+# json_object = r.json()
+# customers = json_object['customers']
+
+# if len(customers) == 0:
+#     break

@@ -6,14 +6,14 @@ class ShopiPy:
 
     def __init__(
         self,
-        shop_domain: str,
+        shop_domain: str = None,
         version: str = "2021-04",
         api_key: str = None,
         api_secret: str = None,
         app_key: str = None,
         app_password: str = None,
         app_shared_secret: str = None,
-        token: str = None
+        access_token: str = None
     ):
         """
         Initial SDK Setup
@@ -25,11 +25,12 @@ class ShopiPy:
             api_secret (str, optional): The App API Secret. Defaults to None.
             app_key (str, optional): The Private App App Key. Defaults to None.
             app_password (str, optional): The Private App Password. Defaults to None.
-            token (str, optional): [description]. Defaults to None.
+            app_shared_secret (str, optional): The Private App Shared Secret, used to validate HMAC. Defaults to None.
+            access_token (str, optional): [description]. Defaults to None.
         """
         self.config = dict(
             shop_domain=shop_domain,
-            token=token,
+            access_token=access_token,
             api_key=api_key,
             api_secret=api_secret,
             app_key=app_key,
@@ -41,7 +42,7 @@ class ShopiPy:
     @property
     def OAuth(self):
         from shopipy.resources.oauth import OAuth
-        return OAuth
+        return OAuth(**self.config)
 
     @property
     def Orders(self):
