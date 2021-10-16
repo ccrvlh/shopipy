@@ -4,13 +4,11 @@ import hmac, urllib, json, sha256, re, six, time # type: ignore
 
 class OAuth(BaseClient):
 
-    api_key: str = ""
-    secret: str = ""
     protocol: str = "https"
-    myshopify_domain: str = "myshopify.com"
+    myshopify: str = "myshopify.com"
     port: str = ""
 
-    def __init__(self, shop_url: str, version: str = None, token: str = None, access_scopes: List[str] = None, *args, **kwargs):
+    def __init__(self, shop_url: str, version: str = "", token: str = "", access_scopes: List[str] = [], *args, **kwargs):
         self.url = self.__prepare_url(shop_url)
         self.token = token
         self.version = version
