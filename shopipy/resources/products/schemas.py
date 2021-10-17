@@ -75,7 +75,7 @@ class Variant(BaseModel):
     tax_code: Optional[str]
 
 
-class Product:
+class Product(BaseModel):
     id: Optional[int]
     title: Optional[str]
     body_html: Optional[str]

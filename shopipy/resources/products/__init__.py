@@ -86,10 +86,12 @@ class Products(BaseClient):
         return self._get(path=f"{self.product_path}/count.json", **cleaned)
 
     def save(self, product: Product):
-        return self._post(path=f"{self.product_path}.json", payload=product)
+        payload = product.dict()
+        return self._post(path=f"{self.product_path}.json", payload=payload)
 
     def update(self, product: Product):
-        return self._put(path=f"{self.product_path}.json", payload=product)
+        payload = product.dict()
+        return self._put(path=f"{self.product_path}.json", payload=payload)
 
     def delete(self, product_id: str):
         return self._delete(path=f"{self.product_path}/{product_id}.json")
