@@ -1,0 +1,20 @@
+[tool.poetry]
+authors = ["Lowercase <lowercase00@gmail.com>"]
+description = "An alternative wrapper to the Shopify API."
+name = "ShopiPy"
+version = "0.3.0"
+
+[tool.poetry.dependencies]
+pydantic = "^1.8.2"
+python = "^3.9"
+requests = "^2.26.0"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.910"
+jupyter = "^1.0.0"
+types-six = "^1.16.2"
+types-requests = "^2.25.11"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
