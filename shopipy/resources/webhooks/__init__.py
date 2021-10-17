@@ -2,12 +2,7 @@ from enum import Enum
 from datetime import datetime
 from typing import List
 from shopipy.base import BaseClient
-
-
-class FormatEnum(Enum):
-    json = "json"
-    xml = "xml"
-
+from .topics import ALL_TOPICS
 
 class Webhooks(BaseClient):
     webhooks_path = "/webhooks"
@@ -69,26 +64,32 @@ class Webhooks(BaseClient):
         self,
         topic: str,
         address: str,
-        format: FormatEnum = FormatEnum.json,
+        format: str = "json",
+        version: str = "2021-04",
         metafield_namespaces: str = None,
         private_metafield_namespaces: str = None
     ):
         """ Sets a single webhook. """
+        if topic not in ALL_TOPICS:
+            raise TypeError("Invalid topic.")
         params = dict(
             topic=topic,
             address=address,
             format=format,
+            version=version,
             metafield_namespaces=metafield_namespaces,
             private_metafield_namespaces=private_metafield_namespaces
         )
-        full_path = f"/{self.webhooks_path}.json"
-        return self._post(path=full_path, payload=params)
+        cleaned_params = self._clean_params(params)
+        payload = dict(webhook=cleaned_params)
+        full_path = f"{self.webhooks_path}.json"
+        return self._post(path=full_path, payload=payload)
 
     def set_webhooks(
         self,
         topics: List[str],
         address: str,
-        format: FormatEnum = FormatEnum.json,
+        format: str = "json",
         metafield_namespaces: str = None,
         private_metafield_namespaces: str = None
     ):

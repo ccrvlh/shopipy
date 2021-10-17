@@ -105,8 +105,7 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        r = requests.post(url=full_path, headers=self.header, data=payload, timeout=self.timeout)
-        response = r.json()
+        response = requests.post(url=full_path, headers=self.header, json=payload, timeout=self.timeout)
         return response
 
     def _put(self, path: str, payload: Dict[Any, Any]):
@@ -121,8 +120,7 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        r = requests.put(url=full_path, headers=self.header, data=payload, timeout=self.timeout)
-        response = r.json()
+        response = requests.put(url=full_path, headers=self.header, json=payload, timeout=self.timeout)
         return response
 
     def _delete(self, path: str, **params):
@@ -137,21 +135,5 @@ class BaseClient:
             Response: Request's JSON Response object.
         """    
         full_path = self.base_url + path
-        r = requests.delete(url=full_path, headers=self.header, timeout=self.timeout, params=dict(**params))
-        response = r.json()
+        response = requests.delete(url=full_path, headers=self.header, timeout=self.timeout, params=dict(**params))
         return response
-
-
-
-
-# time.sleep(1)
-# r = requests.get(str(url), timeout=10)
-# retry_after = r.headers.get('Retry-After', 0)
-# retry_after = int(retry_after)
-# time.sleep(retry_after)
-
-# json_object = r.json()
-# customers = json_object['customers']
-
-# if len(customers) == 0:
-#     break

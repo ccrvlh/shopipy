@@ -1,4 +1,5 @@
 from shopipy.exceptions import *
+from shopipy.resources import webhooks
 
 
 class ShopiPy:
@@ -78,3 +79,8 @@ class ShopiPy:
     def Shipping(self):
         from shopipy.resources.shipping import Shipping
         return Shipping(**self.config)
+
+    @property
+    def Webhooks(self):
+        from shopipy.resources.webhooks import Webhooks
+        return Webhooks(**self.config)

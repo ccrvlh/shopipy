@@ -1,6 +1,6 @@
 from enum import Enum
 
-class Topics(Enum):
+ALL_TOPICS = [
     # Admin
     "app/uninstalled",
     "shop/update",
@@ -105,3 +105,4 @@ class Topics(Enum):
     "themes/delete",
     "themes/publish",
     "themes/update"
+]
