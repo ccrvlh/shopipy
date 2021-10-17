@@ -1,6 +1,6 @@
 from typing import List
 from shopipy.base import BaseClient
-from .schemas import InventoryItem
+from .schemas import InventoryItem, InventoryLocation
 
 class Inventory(BaseClient):
     inv_items = "/inventory_items"
@@ -64,9 +64,17 @@ class Inventory(BaseClient):
         return self._post(path=full_path, payload=payload)
 
     # Inventory Locations
-    def list_locations(self):
-        location_path = self.inv_locations + f".json"
-        return self._get(path=location_path)
+    def list_locations(self, serialize: bool = False):
+        """
+        List a Shop's locations.
+        With the option to serialize the result using Pydantic schemas
+        """
+        results = self._get(path=f"{self.inv_locations}.json")
+        locations_list = results.json()
+        results = locations_list
+        if serialize:
+            results = [InventoryLocation(**location) for location in locations_list]
+        return results
 
     def get_location(self, location_id: str):
         location_path = self.inv_locations + f"/{location_id}.json"

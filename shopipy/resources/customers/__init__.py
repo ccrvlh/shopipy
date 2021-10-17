@@ -16,7 +16,8 @@ class Customers(BaseClient):
         limit: int = 250,
         since_id: int = 0,
         updated_at_max: str = None,
-        updated_at_min: str = None
+        updated_at_min: str = None,
+        serialize: bool = True
     ):
         params = dict(
             created_at_max=created_at_max,
@@ -29,7 +30,12 @@ class Customers(BaseClient):
             updated_at_min=updated_at_min
         )
         count_path = self.customer_path + ".json"
-        return self._get(path=count_path, params=dict(**params))
+        response = self._get(path=count_path, params=dict(**params))
+        all_customers = response.json()
+        response = all_customers
+        if serialize:
+            response = [Customers(**customer) for customer in all_customers]
+        return all_customers
 
     def get_customer(self, customer_id: str, fields: str = None):
         full_path = self.customer_path + f"/{customer_id}.json"
